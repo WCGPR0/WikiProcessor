@@ -7,25 +7,26 @@ Processor::Processor(std::ifstream myFile, double percent = 0.05) : percent(perc
 
 /** Reports the top percent (by default is 5%) of occured words */
 int Processor::topReport(){
-for (int i = 0; i < (int)(percent*count); i++)
+//for (int i = 0; i < (int)(percent*count); i++)
   //Binary search for top count
 }
 
 /** Checks if the node is of color Red.
   @param node to be checked.
   @return int with 0 being Black and 1 being Red. */
-inline int isRed(node *myNode){
-  return (myNode != NULL) && (myNode->COLOR == RED);
+inline int Processor::isRed(node* myNode){
+  return (myNode != NULL) && (myNode->color);
 }
 
 /** Validates if the Tree matches R-B conditions.
     @return a positive int >= 1, equal to the height of the tree, if the tree is valid, \
             else 0 if the tree is invalid.*/
 int Processor::validTree(node* root /**< [in] base node */){
+  node *leftNode, *rightNode;
   if (root == NULL) return 1;
   else {
-    node *leftNode = root->link[0];
-    node *rightNode = root->link[1];
+    leftNode = root->link[0];
+    rightNode = root->link[1];
     if (isRed(root))
        if (isRed(leftNode) && isRed(rightNode)) {//Childs are red when root is red
        std::cout << "Red Violation";
@@ -54,13 +55,13 @@ int Processor::validTree(node* root /**< [in] base node */){
 
 /** Helper function to check if the node should be added to the top reoccuring deque.
   @param the node to be checked. */
-inline void checkNode(node* someNode){
+inline void Processor::checkNode(node* someNode){
   int i = 0;
-    if (someNode->data > topNodes[0]->data) {
+    if (someNode->phrase > topNodes[0]->phrase) {
       if ((int)(count * percent) < topNodes.size())
         topNodes.pop_front();
       else {
-        while ((topNodes[i] != NULL) && (someNode->data > topNodes[i]->data))
+        while ((topNodes[i] != NULL) && (someNode->phrase > topNodes[i]->phrase))
         i++;
       topNodes.insert(topNodes.begin() + i, someNode);
       }
@@ -72,24 +73,24 @@ inline void checkNode(node* someNode){
     @param the data for the new node to be created to have.
     @return the pointer to the inserted Node
     */
-node* Processor::insert(node* someNode, std::string phrase) {
+Processor::node* Processor::insert(node* someNode, std::string phrase) {
   if (someNode == NULL) {
     someNode = createNode(phrase);
     count++;
   }
   else if (phrase == someNode->phrase) {
-    someNode->count++;
+    someNode->counter++;
     count++;
   }
   else {
-    int direction = phrase >= root->phrase; //0 for left, and 1 for right
-    root->link[direction] = insert(root->link[direction], phrase); //Recursion to find the right location to insert
+    int direction = phrase >= someNode->phrase; //0 for left, and 1 for right
+    someNode->link[direction] = insert(someNode->link[direction], phrase); //Recursion to find the right location to insert
   /** Fixes, and rebalances, the R-B tree if it is invalid */
     if (isRed(someNode->link[direction])) {
       if (isRed(someNode->link[!direction])) {
         //If both children is red, then the parent has to be black; we flip the colors
-        someNode->COLOR = RED;
-        someNode->link[0]->COLOR = someNode->link[1]->COLOR = BLACK;
+        someNode->color = node::RED;
+        someNode->link[0]->color = someNode->link[1]->color = node::BLACK;
       }
       else {
       //If the children are of different colors
@@ -110,23 +111,23 @@ node* Processor::insert(node* someNode, std::string phrase) {
 /** Inserts directly into the tree a node with the phrase.
   @param the data to be inserted as a node with that phrase. */
 void Processor::insert(std::string phrase) {
-  myTree->root = insert(myTree->root, phrase);
-  myTree->root->COLOR = BLACK;
+  myTree.root = insert(myTree.root, phrase);
+  myTree.root->color = node::BLACK;
 }
 
 /** Helper function to create a red node.
    @param string data to be inserted.
    @return pointer to created Node */
-node* Processor::createNode(std::string phrase){
+Processor::node* Processor::createNode(std::string phrase){
+  node* newNode;
   try {
-    node* newNode = new node;
+    newNode = new node;
     newNode->phrase = phrase;
-    newNode->COLOR = RED; //Creating a red node, and fixing it after, because it's preffered over a black node (as a black node will always have a violation)
-    newNode->link[0] = newNode->Link[1] = NULL; //Sets the leafs to be null
+    newNode->color = node::RED; //Creating a red node, and fixing it after, because it's preffered over a black node (as a black node will always have a violation)
+    newNode->link[0] = newNode->link[1] = NULL; //Sets the leafs to be null
   }
   catch (std::bad_alloc& exception) {
-  std::cerr << exception; }
-
+  std::cerr << exception.what(); }
   return newNode;
 }
 
@@ -135,13 +136,13 @@ node* Processor::createNode(std::string phrase){
   @param the direction to rotate to. An integer value 0 being left, 1 being right.
   @return the new node rotated.
   */
-node* Processor::singleRotate(node* someNode, int direction) {
+Processor::node* Processor::singleRotate(node* someNode, int direction) {
   node* tempNode = someNode->link[!direction];
   someNode->link[!direction] = tempNode->link[direction];
   tempNode->link[direction] = someNode;
 
-  someNode->COLOR = RED;
-  tempNode->COLOR = BLACK;
+  someNode->color = node::RED;
+  tempNode->color = node::BLACK;
 
   return tempNode;
 }
@@ -151,13 +152,14 @@ node* Processor::singleRotate(node* someNode, int direction) {
   @param the direction to rotate to. An integer value 0 being left, 1 being right.
   @return the new node rotated.
   */
-node* Processor::doubleRotate(node* someNode, int direction) {
+Processor::node* Processor::doubleRotate(node* someNode, int direction) {
   someNode->link[!direction] = singleRotate(someNode->link[!direction], !direction);
   return singleRotate(someNode, direction);
 }
 
-ostream& opeartor<<(ostream& out, Processor& processor){
-
+std::ostream& operator<<(std::ostream& out, Processor& processor){
+  //write to out
+return out;
 }
 
 /** Helper function to delete the tree through recursion.
@@ -173,6 +175,6 @@ void Processor::deleteTree(node* someNode) {
 /** Deconstructor */
 Processor::~Processor(){
   //Cleanup
-  deleteTree(myTree->root);
-  myTree->root = NULL;
+  deleteTree(myTree.root);
+  myTree.root = NULL;
 }
