@@ -2,13 +2,14 @@
 
 /** Default constructor */
 Processor::Processor(std::ifstream myFile, double percent = 0.05) : percent(percent){
-
+count=0;
 }
 
 /** Reports the top percent (by default is 5%) of occured words */
 int Processor::topReport(){
 //for (int i = 0; i < (int)(percent*count); i++)
   //Binary search for top count
+return 0;
 }
 
 /** Checks if the node is of color Red.

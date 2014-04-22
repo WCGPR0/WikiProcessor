@@ -11,13 +11,15 @@
 class Processor {
 private:
     struct node {
-      int counter = 1; ///< Amount of equal word encountered
-      std::string phrase = nullptr; ///< Data for each string phrase
+      int counter; ///< Amount of equal word encountered
+      std::string phrase;// = nullptr; ///< Data for each string phrase
       enum COLOR {
         BLACK, RED ///< Color of the nodes: black being 0, and red being 1
       } color;
       node *link[2]; ///<link[0] is left child and Link[1] is right child
-    };
+   node() : counter(1), phrase(nullptr) {
+	}
+	 };
     /*** Helper function to check if a node is red */
     inline int isRed(node *myNode);
     /*** Helper function to create a node */
@@ -26,7 +28,7 @@ private:
     inline void checkNode(node* someNode);
     /** Helper function to delete the tree */
     void deleteTree(node* someNode);
-    int count = 0; ///< Total amount of words encountered
+    int count;// = 0; ///< Total amount of words encountered
     struct tree {
       node *root;
     } myTree;
