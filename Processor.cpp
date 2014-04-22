@@ -1,14 +1,19 @@
 #include "Processor.h"
 
+/** Default constructor */
 Processor::Processor(std::ifstream myFile, double percent = 0.05) : percent(percent){
 
 }
 
+/** Reports the top percent (by default is 5%) of occured words */
 int Processor::topReport(){
 for (int i = 0; i < (int)(percent*count); i++)
   //Binary search for top count
 }
 
+/** Checks if the node is of color Red.
+  @param node to be checked.
+  @return int with 0 being Black and 1 being Red. */
 inline int isRed(node *myNode){
   return (myNode != NULL) && (myNode->COLOR == RED);
 }
@@ -47,6 +52,8 @@ int Processor::validTree(node* root /**< [in] base node */){
   else return 0;
 }
 
+/** Helper function to check if the node should be added to the top reoccuring deque.
+  @param the node to be checked. */
 inline void checkNode(node* someNode){
   int i = 0;
     if (someNode->data > topNodes[0]->data) {
@@ -100,6 +107,8 @@ node* Processor::insert(node* someNode, std::string phrase) {
 }
 
 
+/** Inserts directly into the tree a node with the phrase.
+  @param the data to be inserted as a node with that phrase. */
 void Processor::insert(std::string phrase) {
   myTree->root = insert(myTree->root, phrase);
   myTree->root->COLOR = BLACK;
@@ -151,8 +160,19 @@ ostream& opeartor<<(ostream& out, Processor& processor){
 
 }
 
+/** Helper function to delete the tree through recursion.
+   @param the root node to begin deletion. */
+void Processor::deleteTree(node* someNode) {
+  if (someNode == NULL) return;
+//Delete subtrees
+  deleteTree(someNode->link[0]);
+  deleteTree(someNode->link[1]);
+  delete someNode;
+}
+
+/** Deconstructor */
 Processor::~Processor(){
   //Cleanup
-
-
+  deleteTree(myTree->root);
+  myTree->root = NULL;
 }

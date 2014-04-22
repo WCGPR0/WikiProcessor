@@ -39,6 +39,8 @@ private:
   node* createNode(std::string phrase);
   /*** Helper function to add the node to topNodes */
   inline void checkNode(node* someNode);
+  /** Helper function to delete the tree */
+  void deleteTree(node* someNode);
   int count = 0; ///< Total amount of words encountered
   struct node {
     int counter = 1; ///< Amount of equal word encountered
