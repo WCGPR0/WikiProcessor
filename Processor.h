@@ -3,21 +3,23 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <stdio.h>
 #include <assert.h>
 #include <iostream>
 #include <deque>
+#include <stdexcept>
 
 class Processor {
 private:
     struct node {
       int counter; ///< Amount of equal word encountered
-      std::string phrase;// = nullptr; ///< Data for each string phrase
+      std::string phrase;///< Data for each string phrase
       enum COLOR {
         BLACK, RED ///< Color of the nodes: black being 0, and red being 1
       } color;
       node *link[2]; ///<link[0] is left child and Link[1] is right child
-   node() : counter(1), phrase(nullptr) {
+   node() : counter(1), phrase("") {
 	}
 	 };
     /*** Helper function to check if a node is red */
@@ -28,7 +30,7 @@ private:
     inline void checkNode(node* someNode);
     /** Helper function to delete the tree */
     void deleteTree(node* someNode);
-    int count;// = 0; ///< Total amount of words encountered
+    int count; ///< Total amount of words encountered
     struct tree {
       node *root;
     } myTree;
@@ -39,7 +41,7 @@ private:
 
 public:
   /*** Default Constructor */
-  Processor(std::ifstream myFile, double percent); ///<[in] ifstream file
+  Processor(std::string myFile, double percent = 0.05); ///<[in] ifstream file
   /*** Inserts a node into R-B tree
   @param node to be inserted */
   node* insert(node* someNode, std::string phrase);

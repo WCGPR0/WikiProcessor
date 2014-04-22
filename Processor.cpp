@@ -1,8 +1,22 @@
 #include "Processor.h"
 
 /** Default constructor */
-Processor::Processor(std::ifstream myFile, double percent = 0.05) : percent(percent){
-count=0;
+Processor::Processor(std::string myFile, double percent) : percent(percent) {
+count = 0;
+std::fstream fs(myFile, std::fstream::in);
+if (fs.fail()) {
+	std::cerr << "Unable to locate the file, please check name" << std::endl;
+	throw std::runtime_error("Error opening file: " + myFile);
+}
+
+//Constructs the R-B tree
+std::string tempWord;
+while ((fs >> tempWord) && (!fs.eof()))
+ if (!tempWord.empty()) {
+		insert(tempWord);
+	}
+fs.close();
+//assert(!fs.fail());
 }
 
 /** Reports the top percent (by default is 5%) of occured words */
@@ -59,7 +73,7 @@ int Processor::validTree(node* root /**< [in] base node */){
 inline void Processor::checkNode(node* someNode){
   int i = 0;
     if (someNode->phrase > topNodes[0]->phrase) {
-      if ((int)(count * percent) < topNodes.size())
+      if ((unsigned int)(count * percent) < topNodes.size())
         topNodes.pop_front();
       else {
         while ((topNodes[i] != NULL) && (someNode->phrase > topNodes[i]->phrase))
@@ -101,7 +115,7 @@ Processor::node* Processor::insert(node* someNode, std::string phrase) {
       else if (isRed(someNode->link[direction]->link[!direction]))
         //If the right child of the child is the violation, do a double rotation
         someNode = doubleRotate(someNode, !direction);
-      else std::cerr << "Logic Error!";
+      //else std::cerr << "Logic Error!";
       }
     }
   }
@@ -120,10 +134,12 @@ void Processor::insert(std::string phrase) {
    @param string data to be inserted.
    @return pointer to created Node */
 Processor::node* Processor::createNode(std::string phrase){
+  assert(!phrase.empty());
   node* newNode;
-  try {
+
+try {
     newNode = new node;
-    newNode->phrase = phrase;
+	   newNode->phrase = phrase;
     newNode->color = node::RED; //Creating a red node, and fixing it after, because it's preffered over a black node (as a black node will always have a violation)
     newNode->link[0] = newNode->link[1] = NULL; //Sets the leafs to be null
   }
