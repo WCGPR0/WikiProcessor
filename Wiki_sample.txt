@@ -1,0 +1,12 @@
+<TITLE> Title One <\TITLE>
+This is a sample article. It constitutes article 1, not 2 or 3.
+
+<TITLE> Title Two <\TITLE>
+This is another (2) sample. This article is slightly longer than the previous one.
+It constitutes article 2, not 1 or 3.
+
+<TITLE> Title Three <\TITLE>
+This is a final (3) sample article. This article is even longer than the previous two. That's because
+it needs to be (since we need to check a few more cases).
+It constitutes article 3, not 1 or 2.
+
