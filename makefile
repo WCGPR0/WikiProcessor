@@ -4,7 +4,7 @@ CPPFLAGS=-g -std=c++0x -Wall
 SOURCES=Processor.cpp Driver.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 PACKAGES=$(SOURCES)
-EXECUTABLE=project01
+EXECUTABLE=wikiParse
 
 all: $(SOURCES) $(EXECUTABLE) 
 	
@@ -20,4 +20,4 @@ dist:	$(PACKAGES)
 	gzip $(PROJECT).tar
 
 clean:
-	rm -f *.o $(EXECUTABLE)
+	rm -f *.o $(EXECUTABLE) report.txt sorted_words.txt
