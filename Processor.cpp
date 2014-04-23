@@ -122,16 +122,17 @@ int Processor::compare(node* someNode, Processor::tree& tree){
 
 /** Helper function to check if the node should be added to the top reoccuring deque.
   @param the node to be checked. */
-inline void Processor::checkNode(node* someNode){
+void Processor::checkNode(node* someNode){
   int i = 0;
-    if (someNode->phrase > topNodes[0]->phrase) {
+    if (topNodes.empty()) topNodes.insert(topNodes.begin(), someNode);
+    else if (someNode->phrase > topNodes.front()->phrase) {
       if ((unsigned int)(count * percent) < topNodes.size())
-        topNodes.pop_front();
+      topNodes.pop_front();
       else {
         while ((topNodes[i] != NULL) && (someNode->phrase > topNodes[i]->phrase))
         i++;
       topNodes.insert(topNodes.begin() + i, someNode);
-      }
+    }
     }
 }
 
@@ -179,8 +180,8 @@ Processor::node* Processor::insert(node* someNode, std::string phrase) {
   @param the data to be inserted as a node with that phrase. */
 void Processor::insert(std::string phrase) {
   myTree.root = insert(myTree.root, phrase);
-  checkNode(myTree.root);
   myTree.root->color = node::BLACK;
+  checkNode(myTree.root);
 }
 
 /** Helper function to create a red node.
