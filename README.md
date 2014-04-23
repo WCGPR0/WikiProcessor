@@ -4,3 +4,5 @@ A project, authored by Victor Wu and Alex Rivie, from a Data Structures and Algo
 Designed to process formatted strings (like wikis), and extract the data from it.
 
 Implemented in C++.
+
+Special thanks to Julienne Walker's awesome open-source tutorials!
