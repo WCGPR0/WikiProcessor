@@ -22,12 +22,15 @@ int main(int argc, char* argv[]) {
 	}
 
 	Processor* myProcessor = new Processor(fileName);
+	cout << "Printing List" << endl;
+	cout << *myProcessor << endl;
+	cout << "End of list" << endl;
 
 	delete myProcessor;
 
 	gettimeofday(&end, NULL);
 	float runtime = (end.tv_usec - start.tv_usec);
-	cout << runtime << endl;
+	cout << "Run time is: " << runtime << endl;
 	
 	return 0;
 }

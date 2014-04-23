@@ -38,6 +38,8 @@ private:
     /*** Constructs a node and inserts into R-B tree
     @param node to be inserted */
     void insert(std::string phrase);
+    /*** Helper function to traverse a list from the left in order */
+    void printInOrder (std::ostream& out, node* someNode);
 
 public:
   /*** Default Constructor */
@@ -61,6 +63,10 @@ public:
   @param the direction to rotate to, 0 being left, and 1 being right. */
   node* doubleRotate(node* someNode, int direction);
   const double percent; ///< Percent to report, used by topReport()
+  /*** Deconstructor */
   ~Processor();
+  
+  friend std::ostream& operator<<(std::ostream& out, Processor& processor);
 };
+
 #endif

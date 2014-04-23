@@ -175,8 +175,18 @@ Processor::node* Processor::doubleRotate(node* someNode, int direction) {
 }
 
 std::ostream& operator<<(std::ostream& out, Processor& processor){
-  //write to out
+  //Inorder Traversal
+  processor.printInOrder(out, processor.myTree.root);
 return out;
+}
+
+void Processor::printInOrder (std::ostream& out, node* someNode) {
+  if (someNode != NULL) {
+    //Moves far left as possible
+    this->printInOrder(out, someNode->link[0]);
+    out << someNode->phrase << std::endl;
+    this->printInOrder(out, someNode->link[1]);
+}
 }
 
 /** Helper function to delete the tree through recursion.
