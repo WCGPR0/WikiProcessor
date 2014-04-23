@@ -3,7 +3,7 @@ CC=g++
 CPPFLAGS=-g -std=c++0x -Wall -I ./
 SOURCES=Processor.cpp Driver.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-PACKAGES=$(SOURCES)
+PACKAGES=$(SOURCES) makefile README.md
 EXECUTABLE=wikiParse
 
 all: $(SOURCES) $(EXECUTABLE) 
@@ -16,7 +16,7 @@ $(EXECUTABLE): $(OBJECTS)
 
 $(PROJECT).tar.gz \
 dist:	$(PACKAGES)
-	tar -czvf $(PROJECT).tar $(PACKAGES)
+	tar -czvf $(PROJECT).tar $(PACKAGES) ./boost
 	gzip $(PROJECT).tar
 
 clean:

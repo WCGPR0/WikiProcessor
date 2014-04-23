@@ -1,0 +1,3 @@
+-Try to get the third parameter (z) in report.txt (title of the article) working
+-The percent of words that are stop words look small, maybe an error somewhere
+-There is a random line of junk code at the top of report.txt (find that bug)
