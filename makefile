@@ -1,6 +1,6 @@
 PROJECT=vwu4_05_project01.tar.gz
 CC=g++
-CPPFLAGS=-g -std=c++0x -Wall
+CPPFLAGS=-g -std=c++0x -Wall -I ./
 SOURCES=Processor.cpp Driver.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 PACKAGES=$(SOURCES)

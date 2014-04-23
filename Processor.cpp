@@ -13,10 +13,24 @@ if (fs.fail()) {
 std::string tempWord;
 while ((fs >> tempWord) && (!fs.eof()))
  if (!tempWord.empty()) {
-		insert(tempWord);
+    int pos;
+		while ((pos = validateString(tempWord)))
+      tempWord.erase(tempWord.begin() + pos - 1);
+    insert(tempWord);
 	}
 fs.close();
 //assert(!fs.fail());
+}
+
+/** Helper function to trim words by finding position of punctuations
+   @param string to be tested for
+  @return an integer value of the position of the first punctation (starting at 1), 0 if it's good */
+inline int Processor::validateString(std::string myString){
+  int i = 1;
+  for (char& c : myString)
+      if (std::ispunct(c) && c != '\'' && c != '-') return i;
+      else i++;
+  return 0;
 }
 
 /** Reports the top percent (by default is 5%) of occured words */
@@ -65,6 +79,44 @@ int Processor::validTree(node* root /**< [in] base node */){
     return 0;
   }
     else return isRed(root) ? leftHeight : leftHeight+1; //leftHeight and rightHeight can be used interchangeably here
+  else return 0;
+}
+
+/*** Finds a given a prase, irrelevant of case.
+  @param the root to begin searching from.
+  @param the string phrase to look for.
+  @return 1 if found, else 0 */
+int Processor::find(node* someNode, std::string& phrase) {
+  while (someNode != NULL) {
+    if (boost::iequals(someNode->phrase, phrase) != 0) return 1;
+    else {
+      int direction = someNode->phrase < phrase;
+      someNode = someNode->link[direction];
+    }
+  }
+  return 0;
+}
+
+/** Function that compares two trees.
+  @param Tree to be search
+  @return number of matches found */
+int Processor::compareTrees(Processor* processor) {
+  if (processor->myTree.root == NULL || this->myTree.root == NULL) return 0;
+  else {
+    return Processor::compare(processor->myTree.root, this->myTree);
+  }
+}
+
+/** Helper function that traverses down a node and compares with a tree.
+  @param root node to search with.
+  @param the tree to search.
+  @return the number matches found */
+int Processor::compare(node* someNode, Processor::tree& tree){
+  if (someNode != NULL) {
+    if (find(tree.root, someNode->phrase))
+      return 1 + compare(someNode->link[0], tree) +
+          compare(someNode->link[1], tree);
+  }
   else return 0;
 }
 

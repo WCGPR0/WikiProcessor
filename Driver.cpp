@@ -25,12 +25,17 @@ int main(int argc, char* argv[]) {
 	cout << "Printing List" << endl;
 	cout << *myProcessor << endl;
 	cout << "End of list" << endl;
+	
+	Processor* stopProcessor = new Processor(stopFile);
+	
+	cout << "Amount of stops" << endl;	
+	cout << myProcessor->compareTrees(stopProcessor);
 
 	delete myProcessor;
-
+	delete stopProcessor;
 	gettimeofday(&end, NULL);
 	float runtime = (end.tv_usec - start.tv_usec);
 	cout << "Run time is: " << runtime << endl;
-	
+
 	return 0;
 }

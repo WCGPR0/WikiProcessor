@@ -2,6 +2,7 @@
 #define PROCESSOR_H
 
 #include <string>
+#include <strings.h>
 #include <fstream>
 #include <sstream>
 #include <stdio.h>
@@ -9,6 +10,7 @@
 #include <iostream>
 #include <deque>
 #include <stdexcept>
+#include <boost/algorithm/string.hpp>
 
 class Processor {
 private:
@@ -40,6 +42,10 @@ private:
     void insert(std::string phrase);
     /*** Helper function to traverse a list from the left in order */
     void printInOrder (std::ostream& out, node* someNode);
+    /*** Helper function that finds first position of punctation, starting at 1 */
+    inline int validateString(std::string myString);
+    /*** Helper function that compares all of the nodes below with the tree */
+    int compare(node* someNode, Processor::tree& tree);
 
 public:
   /*** Default Constructor */
@@ -63,9 +69,18 @@ public:
   @param the direction to rotate to, 0 being left, and 1 being right. */
   node* doubleRotate(node* someNode, int direction);
   const double percent; ///< Percent to report, used by topReport()
+  /*** Searches and finds the phrase, irrelevant of case.
+    @param the root node to begin searching from.
+    @param the string phrase to look for.
+    @return 1 if found, else 0 */
+  int find(node* someNode, std::string& phrase);
   /*** Deconstructor */
   ~Processor();
-  
+  /*** Function that compares two trees
+  @param Processor to be compared to
+  @return number of matches found between the two */
+  int compareTrees(Processor* processor);
+
   friend std::ostream& operator<<(std::ostream& out, Processor& processor);
 };
 
