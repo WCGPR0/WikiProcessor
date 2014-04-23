@@ -9,7 +9,6 @@
 #include <assert.h>
 #include <iostream>
 #include <map>
-#include <vector>
 #include <stdexcept>
 #include <boost/algorithm/string.hpp>
 
@@ -35,7 +34,7 @@ private:
     struct tree {
       node *root;
     } myTree;
-    std::map<std::string,int> topNodes; ///< Deque containing top nodes
+    std::multimap<int,std::string> topNodes; ///< Deque containing top nodes
     /*** Constructs a node and inserts into R-B tree
     @param node to be inserted */
     void insert(std::string phrase);
@@ -45,6 +44,8 @@ private:
     inline int validateString(std::string myString);
     /*** Helper function that compares all of the nodes below with the tree */
     int compare(node* someNode, Processor::tree& tree);
+    /*** Helper function that adds nodes to a multimap */
+    void addMap (node* someNode);
 
 public:
   /*** Default Constructor */

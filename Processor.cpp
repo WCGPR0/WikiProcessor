@@ -35,15 +35,25 @@ inline int Processor::validateString(std::string myString){
 
 /** Reports the top percent (by default is 5%) of occured words */
 int Processor::topReport(){
-int topCount = (int)(count * percent);
-//Sorts the Map
-std::cout << "\n" << topCount << std::endl;
-std::vector<std::pair<std::string, int>> vectorNodes(topNodes.begin(), topNodes.end());
-std::partial_sort(vectorNodes.begin(), vectorNodes.begin() + topCount, vectorNodes.end(), intComp());
-std::cout<<"The size of vectorNodes\t"<<vectorNodes.size()<<std::endl;
-for (int i = 0; i < topCount && i < vectorNodes.size(); ++i)
-  std::cout << vectorNodes[i].first << "\t" << vectorNodes[i].second << std::endl;
+addMap(myTree.root);
+int i = 0;
+for (std::multimap<int,std::string>::iterator itr = topNodes.end(); itr != topNodes.begin() && i < (int)(percent * count); --itr){
+    std::cout << itr->first << "\t" << itr->second << std::endl;
+    ++i;
+  }
 return 0;
+}
+
+/** Helper function that adds the nodes to a multimap
+  @param the root Node to start adding from
+  */
+void Processor::addMap (node* someNode) {
+  if (someNode != NULL) {
+    topNodes.insert(std::pair<int,std::string>(someNode->counter,someNode->phrase));
+
+    this->addMap(someNode->link[0]);
+    this->addMap(someNode->link[1]);
+}
 }
 
 /** Checks if the node is of color Red.
@@ -171,9 +181,6 @@ Processor::node* Processor::insert(node* someNode, std::string phrase) {
 void Processor::insert(std::string phrase) {
   myTree.root = insert(myTree.root, phrase);
   myTree.root->color = node::BLACK;
-  std::pair<std::map<std::string,int>::iterator,bool> ret;
-  ret = topNodes.insert(std::pair<std::string,int>(myTree.root->phrase,myTree.root->counter));
-  if (ret.second == false) topNodes[ret.first->first]++;
 }
 
 /** Helper function to create a red node.
@@ -226,6 +233,10 @@ std::ostream& operator<<(std::ostream& out, Processor& processor){
 return out;
 }
 
+/** Helper function to traverse through a list from the left.
+  @param the ostream that's being outputted to.
+  @param the root node to begin traversing.
+  */
 void Processor::printInOrder (std::ostream& out, node* someNode) {
   if (someNode != NULL) {
     //Moves far left as possible
@@ -234,6 +245,7 @@ void Processor::printInOrder (std::ostream& out, node* someNode) {
     this->printInOrder(out, someNode->link[1]);
 }
 }
+
 
 /** Helper function to delete the tree through recursion.
    @param the root node to begin deletion. */
