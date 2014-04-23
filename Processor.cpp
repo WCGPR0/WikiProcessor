@@ -35,8 +35,8 @@ inline int Processor::validateString(std::string myString){
 
 /** Reports the top percent (by default is 5%) of occured words */
 int Processor::topReport(){
-//for (int i = 0; i < (int)(percent*count); i++)
-  //Binary search for top count
+for (int i = 0; i < (int)(percent*count); i++)
+  std::cout << topNodes[i];
 return 0;
 }
 
@@ -179,6 +179,7 @@ Processor::node* Processor::insert(node* someNode, std::string phrase) {
   @param the data to be inserted as a node with that phrase. */
 void Processor::insert(std::string phrase) {
   myTree.root = insert(myTree.root, phrase);
+  checkNode(myTree.root);
   myTree.root->color = node::BLACK;
 }
 
