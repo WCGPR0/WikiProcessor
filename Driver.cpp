@@ -29,7 +29,9 @@ int main(int argc, char* argv[]) {
 	Processor* stopProcessor = new Processor(stopFile);
 	
 	cout << "Amount of stops" << endl;	
-	cout << myProcessor->compareTrees(stopProcessor);
+	cout << myProcessor->compareTrees(stopProcessor) << endl;
+
+	cout << myProcessor->topReport() << endl;
 
 	delete myProcessor;
 	delete stopProcessor;

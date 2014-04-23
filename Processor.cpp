@@ -35,8 +35,8 @@ inline int Processor::validateString(std::string myString){
 
 /** Reports the top percent (by default is 5%) of occured words */
 int Processor::topReport(){
-for (int i = 0; i < (int)(percent*count); i++)
-  std::cout << topNodes[i];
+for (int i = 0; i < (int)(percent*count) && i < topNodes.size(); i++)
+  std::cout << topNodes[i]->phrase;
 return 0;
 }
 
@@ -124,15 +124,12 @@ int Processor::compare(node* someNode, Processor::tree& tree){
   @param the node to be checked. */
 void Processor::checkNode(node* someNode){
   int i = 0;
-    if (topNodes.empty()) topNodes.insert(topNodes.begin(), someNode);
-    else if (someNode->phrase > topNodes.front()->phrase) {
-      if ((unsigned int)(count * percent) < topNodes.size())
+    if (topNodes.empty() || ((unsigned int)(count * percent) >= topNodes.size())) topNodes.insert(topNodes.begin(), someNode);
+    else if (someNode->counter > topNodes.front()->counter) {
       topNodes.pop_front();
-      else {
-        while ((topNodes[i] != NULL) && (someNode->phrase > topNodes[i]->phrase))
+        while ((topNodes[i] != NULL) && (someNode->counter > topNodes[i]->counter))
         i++;
       topNodes.insert(topNodes.begin() + i, someNode);
-    }
     }
 }
 
