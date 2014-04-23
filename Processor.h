@@ -8,7 +8,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include <iostream>
-#include <deque>
+#include <map>
+#include <vector>
 #include <stdexcept>
 #include <boost/algorithm/string.hpp>
 
@@ -28,15 +29,13 @@ private:
     inline int isRed(node *myNode);
     /*** Helper function to create a node */
     node* createNode(std::string phrase);
-    /*** Helper function to add the node to topNodes */
-    inline void checkNode(node* someNode);
     /** Helper function to delete the tree */
     void deleteTree(node* someNode);
     int count; ///< Total amount of words encountered
     struct tree {
       node *root;
     } myTree;
-    std::deque<node*> topNodes; ///< Deque containing top nodes
+    std::map<std::string,int> topNodes; ///< Deque containing top nodes
     /*** Constructs a node and inserts into R-B tree
     @param node to be inserted */
     void insert(std::string phrase);
@@ -80,7 +79,13 @@ public:
   @param Processor to be compared to
   @return number of matches found between the two */
   int compareTrees(Processor* processor);
-
+  /*** Compares two Integer Iterator */
+  struct intComp{
+    bool operator()(const std::pair<std::string, int> &var1,
+                    const std::pair<std::string, int> & var2) {
+                      return var1.second < var2.second;
+                    }
+  };
   friend std::ostream& operator<<(std::ostream& out, Processor& processor);
 };
 

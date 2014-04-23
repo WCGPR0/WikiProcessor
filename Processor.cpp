@@ -35,8 +35,14 @@ inline int Processor::validateString(std::string myString){
 
 /** Reports the top percent (by default is 5%) of occured words */
 int Processor::topReport(){
-for (int i = 0; i < (int)(percent*count) && i < topNodes.size(); i++)
-  std::cout << topNodes[i]->phrase;
+int topCount = (int)(count * percent);
+//Sorts the Map
+std::cout << "\n" << topCount << std::endl;
+std::vector<std::pair<std::string, int>> vectorNodes(topNodes.begin(), topNodes.end());
+std::partial_sort(vectorNodes.begin(), vectorNodes.begin() + topCount, vectorNodes.end(), intComp());
+std::cout<<"The size of vectorNodes\t"<<vectorNodes.size()<<std::endl;
+for (int i = 0; i < topCount && i < vectorNodes.size(); ++i)
+  std::cout << vectorNodes[i].first << "\t" << vectorNodes[i].second << std::endl;
 return 0;
 }
 
@@ -120,19 +126,6 @@ int Processor::compare(node* someNode, Processor::tree& tree){
   else return 0;
 }
 
-/** Helper function to check if the node should be added to the top reoccuring deque.
-  @param the node to be checked. */
-void Processor::checkNode(node* someNode){
-  int i = 0;
-    if (topNodes.empty() || ((unsigned int)(count * percent) >= topNodes.size())) topNodes.insert(topNodes.begin(), someNode);
-    else if (someNode->counter > topNodes.front()->counter) {
-      topNodes.pop_front();
-        while ((topNodes[i] != NULL) && (someNode->counter > topNodes[i]->counter))
-        i++;
-      topNodes.insert(topNodes.begin() + i, someNode);
-    }
-}
-
 /** Inserts a node into the R-B tree.
     @param the Root node to be inserting to.
     @param the data for the new node to be created to have.
@@ -178,7 +171,9 @@ Processor::node* Processor::insert(node* someNode, std::string phrase) {
 void Processor::insert(std::string phrase) {
   myTree.root = insert(myTree.root, phrase);
   myTree.root->color = node::BLACK;
-  checkNode(myTree.root);
+  std::pair<std::map<std::string,int>::iterator,bool> ret;
+  ret = topNodes.insert(std::pair<std::string,int>(myTree.root->phrase,myTree.root->counter));
+  if (ret.second == false) topNodes[ret.first->first]++;
 }
 
 /** Helper function to create a red node.
