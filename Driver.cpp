@@ -11,33 +11,33 @@ int main(int argc, char* argv[]) {
 	gettimeofday(&start, NULL);
 	const string stopFile = "stop.txt";
 	string fileName;
-	if (argc >= 2) {
-	if (argc > 2) std::cerr << "Invalid use.\nUsage: ./wikiParse input_file_name" << endl;
+	if (argc != 2) {
+		std::cerr << "Invalid use.\nUsage: ./wikiParse input_file_name" << endl;
+	return -1;
+	}
 	fileName = argv[1];
-	}
-	else {
-	cout << "Please input the title of the file to processes" << endl;
-	string fileName;
-	cin >> fileName;
-	}
+
+  ofstream myWriter("sorted_words.txt", std::ofstream::out);
 
 	Processor* myProcessor = new Processor(fileName);
-	cout << "Printing List" << endl;
-	cout << *myProcessor << endl;
-	cout << "End of list" << endl;
-	
-	Processor* stopProcessor = new Processor(stopFile);
-	
-	cout << "Amount of stops" << endl;	
-	cout << myProcessor->compareTrees(stopProcessor) << endl;
+	myWriter << *myProcessor << endl;
 
-	cout << myProcessor->topReport() << endl;
+  myWriter.close();
+  myWriter.open("report.txt", std::ofstream::out | std::ofstream::app);
+
+	Processor* stopProcessor = new Processor(stopFile);
+
+	cout << (double)myProcessor->compareTrees(stopProcessor) / (double)myProcessor->getCount() << "% stop words" << endl;
+
+	myProcessor->topReport(myWriter);
+
+  myWriter.close();
 
 	delete myProcessor;
 	delete stopProcessor;
 	gettimeofday(&end, NULL);
 	float runtime = (end.tv_usec - start.tv_usec);
-	cout << "Run time is: " << runtime << endl;
+	std::clog << "Run time is: " << runtime << endl;
 
 	return 0;
 }

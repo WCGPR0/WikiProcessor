@@ -55,7 +55,7 @@ public:
   node* insert(node* someNode, std::string phrase);
   /*** Reports the top percent of words encountered, excluding stop words.
   */
-  int topReport();
+  int topReport(std::ofstream& out);
   /*** Testing function to see if the tree is valid.
   @param the root node to test from */
   //! This function should only be used for developmental purposes/stage
@@ -87,6 +87,10 @@ public:
                       return var1.second < var2.second;
                     }
   };
+  /*** Accessor method for getting count */
+  int const getCount();
+
+  /*** Overloading ostream */
   friend std::ostream& operator<<(std::ostream& out, Processor& processor);
 };
 

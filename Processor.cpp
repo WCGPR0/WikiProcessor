@@ -34,11 +34,11 @@ inline int Processor::validateString(std::string myString){
 }
 
 /** Reports the top percent (by default is 5%) of occured words */
-int Processor::topReport(){
+int Processor::topReport(std::ofstream& out){
 addMap(myTree.root);
 int i = 0;
 for (std::multimap<int,std::string>::iterator itr = topNodes.end(); itr != topNodes.begin() && i < (int)(percent * count); --itr){
-    std::cout << itr->first << "\t" << itr->second << std::endl;
+    out << itr->second << ", " << itr->first << ", " << std::endl;
     ++i;
   }
 return 0;
@@ -128,12 +128,14 @@ int Processor::compareTrees(Processor* processor) {
   @param the tree to search.
   @return the number matches found */
 int Processor::compare(node* someNode, Processor::tree& tree){
+  static int stopCounter = 0;
   if (someNode != NULL) {
     if (find(tree.root, someNode->phrase))
-      return 1 + compare(someNode->link[0], tree) +
+      stopCounter++;
+          compare(someNode->link[0], tree);
           compare(someNode->link[1], tree);
   }
-  else return 0;
+  return stopCounter;
 }
 
 /** Inserts a node into the R-B tree.
@@ -255,6 +257,13 @@ void Processor::deleteTree(node* someNode) {
   deleteTree(someNode->link[0]);
   deleteTree(someNode->link[1]);
   delete someNode;
+}
+
+/** Accessor method for count.
+  @return value of count.
+  */
+int const Processor::getCount() {
+  return count;
 }
 
 /** Deconstructor */
