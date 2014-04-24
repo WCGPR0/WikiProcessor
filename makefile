@@ -1,9 +1,9 @@
-PROJECT=vwu4_05_project01.tar.gz
+PROJECT=vwu4_05_project01
 CC=g++
 CPPFLAGS=-g -std=c++0x -Wall -I ./
 SOURCES=Processor.cpp Driver.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-PACKAGES=$(SOURCES) makefile README.md
+PACKAGES=$(SOURCES) Processor.h makefile README.md
 EXECUTABLE=wikiParse
 
 all: $(SOURCES) $(EXECUTABLE) 

@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
 	myProcessor->topReport(myWriter);
 
-  myWriter.close();
+	  myWriter.close();
 
 	delete myProcessor;
 	delete stopProcessor;

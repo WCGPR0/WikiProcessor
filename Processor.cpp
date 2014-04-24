@@ -11,9 +11,19 @@ if (fs.fail()) {
 
 //Constructs the R-B tree
 std::string tempWord;
+int pos;
+title = "NONE";
 while ((fs >> tempWord) && (!fs.eof()))
  if (!tempWord.empty()) {
-    int pos;
+    if (tempWord == "<TITLE>") {
+      title.clear();
+      while (true) {
+        fs >> tempWord;
+        if (tempWord != "</TITLE")
+          title+=tempWord;
+        else break;
+      }
+    }
 		while ((pos = validateString(tempWord)))
       tempWord.erase(tempWord.begin() + pos - 1);
     insert(tempWord);
@@ -21,6 +31,8 @@ while ((fs >> tempWord) && (!fs.eof()))
 fs.close();
 //assert(!fs.fail());
 }
+
+
 
 /** Helper function to trim words by finding position of punctuations
    @param string to be tested for
@@ -37,8 +49,8 @@ inline int Processor::validateString(std::string myString){
 int Processor::topReport(std::ofstream& out){
 addMap(myTree.root);
 int i = 0;
-for (std::multimap<int,std::string>::iterator itr = topNodes.end(); itr != topNodes.begin() && i < (int)(percent * count); --itr){
-    out << itr->second << ", " << itr->first << ", " << std::endl;
+for (std::multimap<int,myPair >::iterator itr = topNodes.end(); itr != topNodes.begin() && i < (int)(percent * count); --itr){
+    out << itr->second.first << ", " << itr->first << ", " << ", " << itr->second.second << std::endl;
     ++i;
   }
 return 0;
@@ -49,7 +61,7 @@ return 0;
   */
 void Processor::addMap (node* someNode) {
   if (someNode != NULL) {
-    topNodes.insert(std::pair<int,std::string>(someNode->counter,someNode->phrase));
+  topNodes.insert(std::make_pair(someNode->counter, std::make_pair(someNode->phrase, title)));
 
     this->addMap(someNode->link[0]);
     this->addMap(someNode->link[1]);

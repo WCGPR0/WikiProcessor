@@ -13,6 +13,7 @@
 #include <boost/algorithm/string.hpp>
 
 class Processor {
+  typedef std::pair<std::string,std::string> myPair;
 private:
     struct node {
       int counter; ///< Amount of equal word encountered
@@ -34,7 +35,7 @@ private:
     struct tree {
       node *root;
     } myTree;
-    std::multimap<int,std::string> topNodes; ///< Deque containing top nodes
+    std::multimap<int,myPair > topNodes; ///< Deque containing top nodes
     /*** Constructs a node and inserts into R-B tree
     @param node to be inserted */
     void insert(std::string phrase);
@@ -46,6 +47,7 @@ private:
     int compare(node* someNode, Processor::tree& tree);
     /*** Helper function that adds nodes to a multimap */
     void addMap (node* someNode);
+    std::string title; ///< Current title of words
 
 public:
   /*** Default Constructor */
